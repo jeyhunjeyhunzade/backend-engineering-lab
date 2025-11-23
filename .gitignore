@@ -13,6 +13,7 @@ bin/
 *.out
 *.test
 coverage/
+main
 
 # OS / Editors
 .DS_Store
