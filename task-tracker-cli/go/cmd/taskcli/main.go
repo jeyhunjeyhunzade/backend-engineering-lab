@@ -25,7 +25,7 @@ func run(args []string) int {
 	switch args[1] {
 	case "help", "-h", "--help":
 		printHelp()
-		return ExitGeneralErr
+		return ExitOk
 	case "add":
 		fmt.Println("(stub) add is not implemented yet")
 		return ExitGeneralErr
