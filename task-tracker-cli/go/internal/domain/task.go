@@ -45,7 +45,7 @@ func ParseStatus(s string) (TaskStatus, error) {
 	case string(StatusDone):
 		return StatusDone, nil
 	default:
-		return "", &ValidationError{Msg: fmt.Sprintf("invalid statyus %q (expected: todo|in-progress|done)", s)}
+		return "", &ValidationError{Msg: fmt.Sprintf("invalid status %q (expected: todo|in-progress|done)", s)}
 	}
 }
 
