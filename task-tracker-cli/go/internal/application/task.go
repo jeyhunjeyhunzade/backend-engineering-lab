@@ -1,6 +1,7 @@
 package application
 
 import (
+	"sort"
 	"taskcli/internal/domain"
 	"taskcli/internal/ports"
 )
@@ -84,4 +85,63 @@ func (s *TaskService) Delete(id int) error {
 	tasks = append(tasks[:idx], tasks[idx+1:]...)
 
 	return s.repo.Save(tasks)
+}
+
+func (s *TaskService) MarkInProgress(id int) error {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return err
+	}
+
+	for i := range tasks {
+		if tasks[i].ID == id {
+			if err := tasks[i].MarkInProgress(); err != nil {
+				return err
+			}
+
+			return s.repo.Save(tasks)
+		}
+	}
+
+	return &domain.NotFoundError{Msg: "task not found"}
+}
+
+func (s *TaskService) MarkDone(id int) error {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return err
+	}
+
+	for i := range tasks {
+		if tasks[i].ID == id {
+			if err := tasks[i].MarkDone(); err != nil {
+				return err
+			}
+
+			return s.repo.Save(tasks)
+		}
+	}
+
+	return &domain.NotFoundError{Msg: "task not found"}
+}
+
+func (s *TaskService) List(filter *domain.TaskStatus) ([]domain.Task, error) {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	if filter == nil {
+		sort.Slice(tasks, func(i, j int) bool { return tasks[i].ID < tasks[j].ID })
+	}
+
+	res := make([]domain.Task, 0, len(tasks))
+	for _, t := range tasks {
+		if t.Status == *filter {
+			res = append(res, t)
+		}
+	}
+
+	sort.Slice(res, func(i, j int) bool { return res[i].ID < res[j].ID })
+	return res, nil
 }
