@@ -95,7 +95,7 @@ func (r *Repo) Save(tasks []domain.Task) error {
 	}
 	if err := tmp.Close(); err != nil {
 		_ = os.Remove(tmpPath)
-		return cleanup(err)
+		return err
 	}
 
 	// on Windows, os.Rename fails if destination exists

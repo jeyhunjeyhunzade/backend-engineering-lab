@@ -133,6 +133,7 @@ func (s *TaskService) List(filter *domain.TaskStatus) ([]domain.Task, error) {
 
 	if filter == nil {
 		sort.Slice(tasks, func(i, j int) bool { return tasks[i].ID < tasks[j].ID })
+		return tasks, nil
 	}
 
 	res := make([]domain.Task, 0, len(tasks))
