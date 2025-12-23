@@ -12,7 +12,7 @@ import (
 )
 
 // Repo implements TaskRepository against a JSON file on disk.
-// Standard library only. Use os, io, encoding/json, os.CreateTemp + os.Rename for atomic-ish writes.
+// It uses only the standard library (os, io, encoding/json) and performs atomic writes using os.CreateTemp followed by os.Rename.
 
 var _ ports.TaskRepository = (*Repo)(nil)
 
@@ -75,7 +75,7 @@ func (r *Repo) Save(tasks []domain.Task) error {
 	}
 	tmpPath := tmp.Name()
 
-	// if we fail anywhere, clean up temp file
+	// If we fail anywhere, clean up temp file
 	cleanup := func(closeErr error) error {
 		_ = tmp.Close()
 		_ = os.Remove(tmpPath)
@@ -98,7 +98,7 @@ func (r *Repo) Save(tasks []domain.Task) error {
 		return err
 	}
 
-	// on Windows, os.Rename fails if destination exists
+	// On Windows, os.Rename fails if destination exists
 	// Best-effort remove the old file first
 	_ = os.Remove(r.path)
 

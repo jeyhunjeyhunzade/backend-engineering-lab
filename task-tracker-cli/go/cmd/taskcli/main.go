@@ -52,20 +52,87 @@ func run(args []string) int {
 		fmt.Printf("Task added successfully (ID: %d)\n", t.ID)
 		return ExitOk
 	case "update":
-		fmt.Println("(stub) update is not implemented yet")
-		return ExitGeneralErr
+		if len(args) < 4 {
+			usage(`update <id> "new description"`)
+			return ExitUsage
+		}
+		id, err := parseID(args[2])
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return ExitUsage
+		}
+		desc := strings.Join(args[3:], " ")
+		if err := svc.Update(id, desc); err != nil {
+			return handleError(err)
+		}
+		fmt.Println("Task updated successfully!")
+		return ExitOk
 	case "delete":
-		fmt.Println("(stub) delete is not implemented yet")
-		return ExitGeneralErr
+		if len(args) < 3 {
+			usage("delete <id>")
+			return ExitUsage
+		}
+		id, err := parseID(args[2])
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return ExitUsage
+		}
+		if err := svc.Delete(id); err != nil {
+			return handleError(err)
+		}
+		fmt.Println("Task deleted successfully!")
+		return ExitOk
 	case "mark-in-progress":
-		fmt.Println("(stub) mark-in-progress is not implemented yet")
-		return ExitGeneralErr
+		if len(args) < 3 {
+			usage("mark-in-progress <id>")
+			return ExitUsage
+		}
+
+		id, err := parseID(args[2])
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return ExitUsage
+		}
+		if err := svc.MarkInProgress(id); err != nil {
+			return handleError(err)
+		}
+
+		fmt.Println("Task marked as in progress")
+		return ExitOk
 	case "mark-done":
-		fmt.Println("(stub) mark-done is not implemented yet")
-		return ExitGeneralErr
+		if len(args) < 3 {
+			usage("mark-done <id>")
+			return ExitUsage
+		}
+		id, err := parseID(args[2])
+		if err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			return ExitUsage
+		}
+		if err := svc.MarkDone(id); err != nil {
+			return handleError(err)
+		}
+		fmt.Println("Task marked as done")
+		return ExitOk
 	case "list":
-		fmt.Println("(stub) list is not implemented yet")
-		return ExitGeneralErr
+		var filter *domain.TaskStatus
+		if len(args) >= 3 {
+			st, err := domain.ParseStatus(args[2])
+			if err != nil {
+				return handleError(err)
+			}
+			filter = &st
+		}
+
+		tasks, err := svc.List(filter)
+		if err != nil {
+			return handleError(err)
+		}
+
+		for _, t := range tasks {
+			fmt.Printf("[%d] %-12s %s\n", t.ID, t.Status, t.Description)
+		}
+		return ExitOk
 	default:
 		fmt.Fprintf(os.Stderr, "unknown command %s\n", args[1])
 		printHelp()
@@ -73,7 +140,7 @@ func run(args []string) int {
 	}
 }
 
-func parseId(s string) (int, error) {
+func parseID(s string) (int, error) {
 	id, err := strconv.Atoi(s)
 	if err != nil || id <= 0 {
 		return 0, fmt.Errorf("invalid id: %q", s)
