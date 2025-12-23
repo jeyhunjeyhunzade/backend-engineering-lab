@@ -49,7 +49,7 @@ func (r *Repo) Load() ([]domain.Task, error) {
 		return nil, err
 	}
 
-	//allow empty file = no tasks
+	// Allow empty file to represent no tasks
 	if len(b) == 0 {
 		return []domain.Task{}, nil
 	}
