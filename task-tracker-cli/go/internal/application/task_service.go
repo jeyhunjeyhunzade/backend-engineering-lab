@@ -46,22 +46,9 @@ func (s *TaskService) Add(description string) (*domain.Task, error) {
 }
 
 func (s *TaskService) Update(id int, desc string) error {
-	tasks, err := s.repo.Load()
-	if err != nil {
-		return err
-	}
-
-	for i := range tasks {
-		if tasks[i].ID == id {
-			if err := tasks[i].UpdateDescription(desc); err != nil {
-				return err
-			}
-
-			return s.repo.Save(tasks)
-		}
-	}
-
-	return &domain.NotFoundError{Msg: "task not found"}
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.UpdateDescription(desc)
+	})
 }
 
 func (s *TaskService) Delete(id int) error {
@@ -88,41 +75,15 @@ func (s *TaskService) Delete(id int) error {
 }
 
 func (s *TaskService) MarkInProgress(id int) error {
-	tasks, err := s.repo.Load()
-	if err != nil {
-		return err
-	}
-
-	for i := range tasks {
-		if tasks[i].ID == id {
-			if err := tasks[i].MarkInProgress(); err != nil {
-				return err
-			}
-
-			return s.repo.Save(tasks)
-		}
-	}
-
-	return &domain.NotFoundError{Msg: "task not found"}
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.MarkInProgress()
+	})
 }
 
 func (s *TaskService) MarkDone(id int) error {
-	tasks, err := s.repo.Load()
-	if err != nil {
-		return err
-	}
-
-	for i := range tasks {
-		if tasks[i].ID == id {
-			if err := tasks[i].MarkDone(); err != nil {
-				return err
-			}
-
-			return s.repo.Save(tasks)
-		}
-	}
-
-	return &domain.NotFoundError{Msg: "task not found"}
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.MarkDone()
+	})
 }
 
 func (s *TaskService) List(filter *domain.TaskStatus) ([]domain.Task, error) {
@@ -145,4 +106,23 @@ func (s *TaskService) List(filter *domain.TaskStatus) ([]domain.Task, error) {
 
 	sort.Slice(res, func(i, j int) bool { return res[i].ID < res[j].ID })
 	return res, nil
+}
+
+func (s *TaskService) withTask(id int, fn func(t *domain.Task) error) error {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return err
+	}
+
+	for i := range tasks {
+		if tasks[i].ID == id {
+			if err := fn(&tasks[i]); err != nil {
+				return err
+			}
+
+			return s.repo.Save(tasks)
+		}
+	}
+
+	return &domain.NotFoundError{Msg: "task not found"}
 }
