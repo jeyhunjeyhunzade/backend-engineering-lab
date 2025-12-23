@@ -23,3 +23,23 @@ Thumbs.db
 
 #md playground
 test.md
+
+# Binaries
+task-tracker-cli-go
+task-tracker-cli-go.exe
+task-cli
+*.exe
+
+# Go build artifacts
+/bin/
+/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

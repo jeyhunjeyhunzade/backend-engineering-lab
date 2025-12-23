@@ -1,0 +1,128 @@
+package application
+
+import (
+	"sort"
+	"taskcli/internal/domain"
+	"taskcli/internal/ports"
+)
+
+// TaskService holds use-cases. No knowledge of file/JSON
+type TaskService struct{ repo ports.TaskRepository }
+
+func NewTaskService(r ports.TaskRepository) *TaskService {
+	return &TaskService{repo: r}
+}
+
+func nextID(tasks []domain.Task) int {
+	max := 0
+	for _, t := range tasks {
+		if t.ID > max {
+			max = t.ID
+		}
+	}
+
+	return max + 1
+}
+
+func (s *TaskService) Add(description string) (*domain.Task, error) {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	id := nextID(tasks)
+
+	task, err := domain.NewTask(id, description)
+	if err != nil {
+		return nil, err
+	}
+
+	tasks = append(tasks, *task)
+	if err := s.repo.Save(tasks); err != nil {
+		return nil, err
+	}
+
+	return task, nil
+}
+
+func (s *TaskService) Update(id int, desc string) error {
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.UpdateDescription(desc)
+	})
+}
+
+func (s *TaskService) Delete(id int) error {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return err
+	}
+
+	idx := -1
+	for i := range tasks {
+		if tasks[i].ID == id {
+			idx = i
+			break
+		}
+	}
+
+	if idx == -1 {
+		return &domain.NotFoundError{Msg: "task not found"}
+	}
+
+	tasks = append(tasks[:idx], tasks[idx+1:]...)
+
+	return s.repo.Save(tasks)
+}
+
+func (s *TaskService) MarkInProgress(id int) error {
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.MarkInProgress()
+	})
+}
+
+func (s *TaskService) MarkDone(id int) error {
+	return s.withTask(id, func(t *domain.Task) error {
+		return t.MarkDone()
+	})
+}
+
+func (s *TaskService) List(filter *domain.TaskStatus) ([]domain.Task, error) {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return nil, err
+	}
+
+	if filter == nil {
+		sort.Slice(tasks, func(i, j int) bool { return tasks[i].ID < tasks[j].ID })
+		return tasks, nil
+	}
+
+	res := make([]domain.Task, 0, len(tasks))
+	for _, t := range tasks {
+		if t.Status == *filter {
+			res = append(res, t)
+		}
+	}
+
+	sort.Slice(res, func(i, j int) bool { return res[i].ID < res[j].ID })
+	return res, nil
+}
+
+func (s *TaskService) withTask(id int, fn func(t *domain.Task) error) error {
+	tasks, err := s.repo.Load()
+	if err != nil {
+		return err
+	}
+
+	for i := range tasks {
+		if tasks[i].ID == id {
+			if err := fn(&tasks[i]); err != nil {
+				return err
+			}
+
+			return s.repo.Save(tasks)
+		}
+	}
+
+	return &domain.NotFoundError{Msg: "task not found"}
+}
