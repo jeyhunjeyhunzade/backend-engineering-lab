@@ -37,7 +37,10 @@ func TestRepoEmptyFile(t *testing.T) {
 	dir := t.TempDir()
 	path := filepath.Join(dir, "tasks.json")
 
-	repo, _ := New(path)
+	repo, err := New(path)
+	if err != nil {
+		t.Fatalf("failed to create repo: %v", err)
+	}
 
 	tasks, err := repo.Load()
 	if err != nil {

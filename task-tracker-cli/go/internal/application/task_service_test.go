@@ -1,11 +1,12 @@
 package application
 
 import (
+	"errors"
 	"taskcli/internal/domain"
 	"testing"
 )
 
-// in-memory repo for tests
+// memRepo is an in-memory implementation of TaskRepository used in tests.
 type memRepo struct {
 	tasks []domain.Task
 }
@@ -36,6 +37,29 @@ func TestAddTask(t *testing.T) {
 	}
 }
 
+func TestAddTask_EmptyDescription_ShouldFail(t *testing.T) {
+	repo := &memRepo{}
+	svc := NewTaskService(repo)
+
+	task, err := svc.Add("")
+	if err == nil {
+		t.Fatalf("expected error for empty description")
+	}
+
+	var validationErr *domain.ValidationError
+	if !errors.As(err, &validationErr) {
+		t.Fatalf("expected ValidationError, got %T: %v", err, err)
+	}
+
+	if task != nil {
+		t.Errorf("expected nil task, got %+v", task)
+	}
+
+	if len(repo.tasks) != 0 {
+		t.Errorf("expected no task saved, got %d tasks", len(repo.tasks))
+	}
+}
+
 func TestUpdateTask(t *testing.T) {
 	repo := &memRepo{
 		tasks: []domain.Task{
@@ -57,7 +81,7 @@ func TestUpdateNotFound(t *testing.T) {
 	repo := &memRepo{}
 	svc := NewTaskService(repo)
 
-	err := svc.Update(42, "Am I exist?")
+	err := svc.Update(42, "Do I exist?")
 	if err == nil {
 		t.Fatalf("expected error")
 	}
