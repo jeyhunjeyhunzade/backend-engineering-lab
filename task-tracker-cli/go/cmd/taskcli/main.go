@@ -65,7 +65,7 @@ func run(args []string) int {
 		if err := svc.Update(id, desc); err != nil {
 			return handleError(err)
 		}
-		fmt.Println("Task updated successfully!")
+		fmt.Println("Task updated successfully")
 		return ExitOk
 	case "delete":
 		if len(args) < 3 {
@@ -80,7 +80,7 @@ func run(args []string) int {
 		if err := svc.Delete(id); err != nil {
 			return handleError(err)
 		}
-		fmt.Println("Task deleted successfully!")
+		fmt.Println("Task deleted successfully")
 		return ExitOk
 	case "mark-in-progress":
 		if len(args) < 3 {
@@ -184,5 +184,5 @@ Usage:
 `
 
 func printHelp() {
-	fmt.Println(help)
+	fmt.Print(help)
 }
