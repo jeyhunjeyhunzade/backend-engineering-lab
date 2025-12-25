@@ -2,6 +2,7 @@ package domain
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -60,7 +61,7 @@ func NewTask(id int, desc string) (*Task, error) {
 	if id <= 0 {
 		return nil, &ValidationError{Msg: "id must be positive!"}
 	}
-	if desc == "" {
+	if strings.TrimSpace(desc) == "" {
 		return nil, &ValidationError{Msg: "description cannot be empty"}
 	}
 
@@ -77,7 +78,7 @@ func NewTask(id int, desc string) (*Task, error) {
 
 // UpdateDescription changes the task description and refreshes its updatedAt
 func (t *Task) UpdateDescription(desc string) error {
-	if desc == "" {
+	if strings.TrimSpace(desc) == "" {
 		return &ValidationError{Msg: "description cannot be empty"}
 	}
 
