@@ -1,7 +1,6 @@
 # 🏗️ Backend Challenge — Fullstack Learning Journey
 
-Welcome to the **Backend Challenge** — a structured, hands-on roadmap to mastering backend development by **building real-world projects twice**:
-first in **TypeScript (Node.js)**, then in **Go (Golang)**.
+Welcome to the **Backend Challenge** — a structured, hands-on roadmap to mastering backend development by **building small to mid-sized projects** for practicing backend engineering.
 
 ---
 
@@ -9,8 +8,9 @@ first in **TypeScript (Node.js)**, then in **Go (Golang)**.
 
 The goal of this challenge is to gain **deep backend engineering experience** by:
 
-- Designing and implementing multiple backend projects.
-- Building each project **first in TypeScript** for clarity, then **reimplementing in Go** for performance and systems-level understanding.
+- Designing and implementing focused backend projects.
+- Building small to mid-sized applications to practice core backend concepts quickly.
+- Building projects in your language(s) of choice based on learning goals and project requirements.
 - Learning modern backend architecture, APIs, databases, CI/CD, and deployment practices.
 
 ---
@@ -23,14 +23,15 @@ Each project lives under its own folder inside `/backend-challenge/`:
 /backend-challenge/
   ├── todo-app/
   │     ├── typescript/
-  │     └── golang/
+  │     ├── golang/
+  │     └── rust/           # Same project, multiple language implementations
   ├── url-shortener/
-  │     ├── typescript/
-  │     └── golang/
+  │     ├── python/
+  │     └── java/
   ├── ...
   ├── infra/
   │     ├── db/
-  │     │     └── migrations/     # Shared SQL migrations used by both languages
+  │     │     └── migrations/     # Shared SQL migrations across all implementations
   │     └── k8s/                  # Optional Kubernetes manifests (later)
   ├── .github/
   │     └── workflows/            # CI/CD automation (GitHub Actions)
@@ -45,24 +46,32 @@ Each project lives under its own folder inside `/backend-challenge/`:
 
 Each project follows this consistent cycle:
 
-| Step                          | Description                                                     |
-| ----------------------------- | --------------------------------------------------------------- |
-| **1. Design**                 | Define endpoints, database schema, and architecture.            |
-| **2. Implement (TypeScript)** | Use Node.js + Express/Fastify or NestJS.                        |
-| **3. Reimplement (Go)**       | Rebuild with idiomatic Go practices.                            |
-| **4. Test**                   | Write unit/integration tests for both versions.                 |
-| **5. Dockerize**              | Add Dockerfile and docker-compose for local setup.              |
-| **6. CI/CD**                  | Integrate build, test, and deploy pipelines via GitHub Actions. |
-| **7. Deploy**                 | Deploy containers to Render, Fly.io, or Railway.                |
+| Step             | Description                                                     |
+| ---------------- | --------------------------------------------------------------- |
+| **1. Design**    | Define endpoints, database schema, and architecture.            |
+| **2. Implement** | Build in your chosen language(s).                               |
+| **3. Test**      | Write unit/integration tests.                                   |
+| **4. Dockerize** | Add Dockerfile and docker-compose for local setup.              |
+| **5. CI/CD**     | Integrate build, test, and deploy pipelines via GitHub Actions. |
+| **6. Deploy**    | Deploy containers to Render, Fly.io, or Railway.                |
 
 ---
 
 ## 🧰 Tech Stack
 
-### Core Languages
+### Languages
 
-- **TypeScript (Node.js)** — productivity & ecosystem learning.
-- **Go (Golang)** — performance, concurrency, and systems understanding.
+Projects can be implemented in multiple languages. Examples include:
+
+- **TypeScript / Node.js** — productivity and rich ecosystem
+- **Go** — performance and concurrency
+- **Python** — versatility and extensive libraries
+- **Rust** — memory safety and performance
+- **Java / Kotlin** — enterprise-grade JVM ecosystem
+- **PHP / Laravel** — web-focused development
+- **C# / .NET** — Microsoft stack
+
+Choose based on your learning goals or implement the same project in multiple languages.
 
 ### Databases
 
@@ -70,14 +79,14 @@ Each project follows this consistent cycle:
 
 ### Tooling
 
-| Purpose          | Tool                                                |
-| ---------------- | --------------------------------------------------- |
-| API              | Express / Fastify / Fiber / Gin                     |
-| ORM              | Prisma (TS), GORM or sqlx (Go)                      |
-| DB Migrations    | Shared SQL scripts in `/infra/db/migrations`        |
-| Containerization | Docker & docker-compose                             |
-| CI/CD            | GitHub Actions                                      |
-| Testing          | Jest / Supertest (TS) · Go’s `testing` package (Go) |
+| Purpose          | Tool                                                            |
+| ---------------- | --------------------------------------------------------------- |
+| API              | Express / Fastify / Fiber / Gin / Flask / FastAPI / Axum / etc. |
+| ORM/Database     | Prisma, GORM, sqlx, SQLAlchemy, Diesel, etc.                    |
+| DB Migrations    | Shared SQL scripts in `/infra/db/migrations`                    |
+| Containerization | Docker & docker-compose                                         |
+| CI/CD            | GitHub Actions                                                  |
+| Testing          | Language-specific testing frameworks                            |
 
 ---
 
@@ -95,48 +104,39 @@ The repository supports **per-project** and **per-language** CI workflows.
 ### Example
 
 ```
-.github/workflows/ci-todo-app.yml
+.github/workflows/ci-todo-app-ts.yml
+.github/workflows/ci-todo-app-go.yml
 ```
 
-Contains isolated pipelines for the `todo-app` TypeScript and Go services.
+Each language implementation has its own CI pipeline.
 
 ---
 
 ## 🧾 Makefile Commands
 
-Each language folder includes its own **Makefile** for standardized local and CI usage:
-
-### TypeScript
+Each language folder has a **Makefile** for standardized operations:
 
 ```bash
-make install    # npm ci
-make test       # npm test
-make build      # npm run build
-make docker     # docker build -t image .
-```
-
-### Go
-
-```bash
-make test       # go test ./...
-make build      # go build ./cmd/api
-make docker     # docker build -t image .
+make install    # Install dependencies
+make test       # Run tests
+make build      # Build the project
+make docker     # Build Docker image
 ```
 
 ---
 
 ## 🧪 Local Development
 
-Every project includes its own `docker-compose.yml` for running locally:
+Each language implementation has its own `docker-compose.yml`:
 
 ```bash
-cd todo-app
+cd todo-app/typescript
 docker-compose up --build
 ```
 
 This spins up:
 
-- App container (TypeScript or Go)
+- Application container
 - Database (Postgres)
 - Optional admin tools (pgAdmin, etc.)
 
@@ -173,9 +173,9 @@ Once a project passes CI:
 By the end of this challenge, you will:
 
 - Be comfortable designing and building backend systems from scratch.
-- Understand both high-level TypeScript productivity and Go performance tuning.
+- Master backend development in your chosen language(s).
 - Use Docker, Postgres, and CI/CD like a professional.
-- Have a strong portfolio of backend projects in two languages.
+- Have a strong portfolio of production-ready backend projects.
 
 ---
 
@@ -194,8 +194,8 @@ Pick your **first project** — recommended starting point:
 Then:
 
 1. Create its architecture plan.
-2. Implement the TypeScript version.
-3. Rebuild it in Go.
+2. Choose your implementation language.
+3. Implement and test the project.
 4. Commit and push — your CI/CD pipeline will handle the rest.
 
 ---
