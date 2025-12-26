@@ -185,4 +185,4 @@ make test     # or: go test ./...
 
 ## 📜 License
 
-This project is part of the Backend Lab learning repository.
+This project is part of the Backend Engineering Lab learning repository.
