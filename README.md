@@ -1,6 +1,6 @@
-# 🏗️ Backend Lab — Fullstack Learning Journey
+# 🏗️ Backend Engineering Lab — Fullstack Learning Journey
 
-Welcome to the **Backend Lab** — a structured, hands-on roadmap to mastering backend development by **building small to mid-sized projects** for practicing backend engineering.
+Welcome to the **Backend Engineering Lab** — a structured, hands-on roadmap to mastering backend development by **building small to mid-sized projects** for practicing backend engineering.
 
 ---
 
@@ -17,10 +17,10 @@ The goal of this lab is to gain **deep backend engineering experience** by:
 
 ## 🧩 Project Structure
 
-Each project lives under its own folder inside `/backend-lab/`:
+Each project lives under its own folder inside `/backend-engineering-lab/`:
 
 ```
-/backend-lab/
+/backend-engineering-lab/
   ├── todo-app/
   │     ├── typescript/
   │     ├── golang/
@@ -181,7 +181,7 @@ By the end of this lab, you will:
 
 ## 📜 License
 
-This lab is for **personal learning and portfolio purposes**.
+This repository is for **personal learning and portfolio purposes**.
 You are free to modify and distribute your code under your preferred license.
 
 ---
