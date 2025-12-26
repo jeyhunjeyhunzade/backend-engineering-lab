@@ -226,4 +226,4 @@ npm start add "Test task"       # Run compiled version
 
 ## 📜 License
 
-This project is part of the Backend Challenge learning repository.
+This project is part of the Backend Lab learning repository.

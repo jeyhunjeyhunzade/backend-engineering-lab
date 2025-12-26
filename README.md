@@ -1,12 +1,12 @@
-# 🏗️ Backend Challenge — Fullstack Learning Journey
+# 🏗️ Backend Lab — Fullstack Learning Journey
 
-Welcome to the **Backend Challenge** — a structured, hands-on roadmap to mastering backend development by **building small to mid-sized projects** for practicing backend engineering.
+Welcome to the **Backend Lab** — a structured, hands-on roadmap to mastering backend development by **building small to mid-sized projects** for practicing backend engineering.
 
 ---
 
 ## 🎯 Goal
 
-The goal of this challenge is to gain **deep backend engineering experience** by:
+The goal of this lab is to gain **deep backend engineering experience** by:
 
 - Designing and implementing focused backend projects.
 - Building small to mid-sized applications to practice core backend concepts quickly.
@@ -17,10 +17,10 @@ The goal of this challenge is to gain **deep backend engineering experience** by
 
 ## 🧩 Project Structure
 
-Each project lives under its own folder inside `/backend-challenge/`:
+Each project lives under its own folder inside `/backend-lab/`:
 
 ```
-/backend-challenge/
+/backend-lab/
   ├── todo-app/
   │     ├── typescript/
   │     ├── golang/
@@ -170,7 +170,7 @@ Once a project passes CI:
 
 ## 🧠 Learning Goals
 
-By the end of this challenge, you will:
+By the end of this lab, you will:
 
 - Be comfortable designing and building backend systems from scratch.
 - Master backend development in your chosen language(s).
@@ -181,7 +181,7 @@ By the end of this challenge, you will:
 
 ## 📜 License
 
-This challenge is for **personal learning and portfolio purposes**.
+This lab is for **personal learning and portfolio purposes**.
 You are free to modify and distribute your code under your preferred license.
 
 ---
